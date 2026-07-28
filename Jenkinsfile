@@ -16,9 +16,9 @@ pipeline {
             }
         }
 
-        stage('완료') {
+        stage('Docker Check') {
             steps {
-                echo 'Pipeline Success!'
+                sh 'docker version'
             }
         }
     }
