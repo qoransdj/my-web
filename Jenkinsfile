@@ -1,24 +1,46 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            defaultContainer 'kaniko'
+
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: kaniko-agent
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:v1.23.2-debug
+    command:
+    - sleep
+    args:
+    - "999999"
+    tty: true
+'''
+        }
+    }
 
     stages {
 
-        stage('Checkout 확인') {
+        stage('Pod 확인') {
             steps {
+                sh 'hostname'
                 sh 'pwd'
                 sh 'ls -al'
             }
         }
 
-        stage('App 확인') {
+        stage('Kaniko 확인') {
             steps {
-                sh 'ls -al app'
+                sh '/kaniko/executor version'
             }
         }
 
-        stage('Docker Check') {
+        stage('완료') {
             steps {
-                sh 'docker version'
+                echo 'Kaniko Agent Success!'
             }
         }
     }
