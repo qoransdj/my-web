@@ -51,5 +51,28 @@ spec:
                 '''
             }
         }
+        stage('Clone Manifest Repository') {
+            steps {
+                dir('manifest') {
+                    git branch: 'main',
+                        credentialsId: 'github-pat',
+                        url: 'https://github.com/qoransdj/my-web-manifest.git'
+                }
+
+                sh '''
+                    echo "===== Current Directory ====="
+                    pwd
+                    
+                    echo "===== Repository ====="
+                    git remote -v
+
+                    echo "===== Branch ====="
+                    git branch
+
+                    echo "===== Files ====="
+                    ls -al
+                '''
+            }
+        }
     }
 }
