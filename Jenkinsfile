@@ -10,9 +10,19 @@ metadata:
   labels:
     app: kaniko-agent
 spec:
+  volumes:
+  - name: docker-config
+    secret:
+      secretName: dockerhub-secret
+      items:
+      - key: .dockerconfigjson
+        path: config.json
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:v1.23.2-debug
+    volumeMounts:
+    - name: docker-config
+      mountPath: /kaniko/.docker
     command:
     - sleep
     args:
@@ -31,16 +41,14 @@ spec:
                 sh 'ls -al'
             }
         }
-
-        stage('Kaniko 확인') {
+        stage('Build and Push Image') {
             steps {
-                sh '/kaniko/executor version'
-            }
-        }
-
-        stage('완료') {
-            steps {
-                echo 'Kaniko Agent Success!'
+                sh '''
+                /kaniko/executor \
+                --context=${WORKSPACE}/app \
+                --dockerfile=${WORKSPACE}/app/Dockerfile \
+                --destination=qoransdj/my-web:v${BUILD_NUMBER}
+                '''
             }
         }
     }
