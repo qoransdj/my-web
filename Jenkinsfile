@@ -122,13 +122,17 @@ spec:
                         ]) {
 
                             sh '''
+                                git config --global --add safe.directory '*'
+
+                                echo "===== Git Status ====="
+                                git status
+                                ls -al
+
+                                echo "===== Git Push ====="
                                 git config user.name "qoransdj"
                                 git config user.email "qoransdj@gmail.com"
-
-                                git add manifest/dep-my-web.yaml
-
+                                git add dep-my-web.yaml
                                 git commit -m "Update image tag to v${BUILD_NUMBER}"
-
                                 git push https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/qoransdj/my-web-manifest.git main
                             '''
                         }
