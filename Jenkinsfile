@@ -48,6 +48,7 @@ spec:
                 sh 'ls -al'
             }
         }
+
         stage('Build and Push Image') {
             steps {
                 container('kaniko'){
@@ -64,6 +65,7 @@ spec:
 
             }
         }
+
         stage('Clone Manifest Repository') {
             steps {
                 container('git'){
@@ -73,16 +75,24 @@ spec:
                             credentialsId: 'github-pat',
                             url: 'https://github.com/qoransdj/my-web-manifest.git'
                         )
+                    }
+                }
+            }
+        }
+
+        stage('Update Image Tag') {
+            steps {
+                container('git') {
+                    dir('manifest') {
                         sh '''
-                        echo "===== Git Container ====="
+                            echo "===== Before ====="
+                            grep image manifest/dep-my-web.yaml
 
-                        hostname
+                            sed -i "s|image: qoransdj/my-web:.*|image: qoransdj/my-web:v${BUILD_NUMBER}|" manifest/dep-my-web.yaml
 
-                        pwd
-
-                        git --version
-
-                        ls -al
+                            echo ""
+                            echo "===== After ====="
+                            grep image manifest/dep-my-web.yaml
                         '''
                     }
                 }

@@ -4,6 +4,28 @@
     <title>My First DevOps</title>
 </head>
 <body>
-    <h1>Hello Kubernetes use jenkins v4</h1>
+
+<h1>Hello Kubernetes</h1>
+
+<h2 id="version">Loading...</h2>
+
+<script>
+fetch("version.txt")
+    .then(response => response.text())
+    .then(version => {
+        document.getElementById("version").innerText = version;
+    });
+</script>
+
 </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>My First DevOps</title>
+</head>
+<body>
+    <h1>Hello Kubernetes use jenkins v4</h1>
+</body>
+</html> -->
