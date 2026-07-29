@@ -54,7 +54,7 @@ spec:
                 }
             }
         }
-        
+
         stage('Build and Push Image') {
             steps {
                 container('kaniko'){
@@ -92,13 +92,13 @@ spec:
                     dir('manifest') {
                         sh '''
                             echo "===== Before ====="
-                            grep image manifest/dep-my-web.yaml
+                            grep image dep-my-web.yaml
 
-                            sed -i "s|image: qoransdj/my-web:.*|image: qoransdj/my-web:v${BUILD_NUMBER}|" manifest/dep-my-web.yaml
+                            sed -i "s|image: qoransdj/my-web:.*|image: qoransdj/my-web:v${BUILD_NUMBER}|" dep-my-web.yaml
 
                             echo ""
                             echo "===== After ====="
-                            grep image manifest/dep-my-web.yaml
+                            grep image dep-my-web.yaml
                         '''
                     }
                 }
