@@ -28,6 +28,13 @@ spec:
     args:
     - "999999"
     tty: true
+  - name: git
+    image: alpine/git:latest
+    command:
+    - sleep
+    args:
+    - "999999"
+    tty: true  
 '''
         }
     }
@@ -43,35 +50,42 @@ spec:
         }
         stage('Build and Push Image') {
             steps {
-                sh '''
-                /kaniko/executor \
-                --context=${WORKSPACE}/app \
-                --dockerfile=${WORKSPACE}/app/Dockerfile \
-                --destination=qoransdj/my-web:v${BUILD_NUMBER}
-                '''
+                containers('kaniko'){
+                    sh '''
+                    echo "=====kaniko====="
+                    hostname
+
+                    /kaniko/executor \
+                    --context=${WORKSPACE}/app \
+                    --dockerfile=${WORKSPACE}/app/Dockerfile \
+                    --destination=qoransdj/my-web:v${BUILD_NUMBER}
+                    '''
+                }
+
             }
         }
         stage('Clone Manifest Repository') {
             steps {
-                dir('manifest') {
-                    git branch: 'main',
-                        credentialsId: 'github-pat',
-                        url: 'https://github.com/qoransdj/my-web-manifest.git'
+                containers('git'){
+                    dir('manifest') {
+                        git(
+                            branch: 'main',
+                            credentialsId: 'github-pat',
+                            url: 'https://github.com/qoransdj/my-web-manifest.git'
+                        )
+                        sh '''
+                        echo "===== Git Container ====="
+
+                        hostname
+
+                        pwd
+
+                        git --version
+
+                        ls -al
+                        '''
+                    }
                 }
-
-                sh '''
-                    echo "===== Current Directory ====="
-                    pwd
-                    
-                    echo "===== Repository ====="
-                    git remote -v
-
-                    echo "===== Branch ====="
-                    git branch
-
-                    echo "===== Files ====="
-                    ls -al
-                '''
             }
         }
     }
