@@ -41,14 +41,20 @@ spec:
 
     stages {
 
-        stage('Pod 확인') {
+        stage('Create Version File') {
             steps {
-                sh 'hostname'
-                sh 'pwd'
-                sh 'ls -al'
+                container('kaniko') {
+                    sh '''
+                        echo "===== Create version.txt ====="
+
+                        echo "Build Version : v${BUILD_NUMBER}" > ${WORKSPACE}/app/version.txt
+
+                        cat ${WORKSPACE}/app/version.txt
+                    '''
+                }
             }
         }
-
+        
         stage('Build and Push Image') {
             steps {
                 container('kaniko'){
