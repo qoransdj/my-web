@@ -91,14 +91,17 @@ spec:
                 container('git') {
                     dir('manifest') {
                         sh '''
-                            echo "===== Before ====="
-                            grep image dep-my-web.yaml
+                            echo "===== Current Files in Manifest Folder ====="
+                            ls -al ./manifest
 
-                            sed -i "s|image: qoransdj/my-web:.*|image: qoransdj/my-web:v${BUILD_NUMBER}|" dep-my-web.yaml
+                            echo "===== Before ====="
+                            grep -i "image" manifest/dep-my-web.yaml || true
+
+                            sed -i "s|image: qoransdj/my-web:.*|image: qoransdj/my-web:v${BUILD_NUMBER}|" manifest/dep-my-web.yaml
 
                             echo ""
                             echo "===== After ====="
-                            grep image dep-my-web.yaml
+                            grep -i "image" manifest/dep-my-web.yaml || true
                         '''
                     }
                 }
