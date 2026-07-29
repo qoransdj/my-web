@@ -107,5 +107,35 @@ spec:
                 }
             }
         }
+
+        stage('Push Manifest Change') {
+            steps {
+                container('git') {
+                    dir('manifest') {
+
+                        withCredentials([
+                            usernamePassword(
+                                credentialsId: 'github-pat',
+                                usernameVariable: 'GIT_USERNAME',
+                                passwordVariable: 'GIT_TOKEN'
+                            )
+                        ]) {
+
+                            sh '''
+                                git config user.name "jenkins"
+                                git config user.email "jenkins@example.com"
+
+                                git add manifest/dep-my-web.yaml
+
+                                git commit -m "Update image tag to v${BUILD_NUMBER}"
+
+                                git push https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/qoransdj/my-web-manifest.git main
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 }
