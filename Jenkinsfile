@@ -50,7 +50,7 @@ spec:
         }
         stage('Build and Push Image') {
             steps {
-                containers('kaniko'){
+                container('kaniko'){
                     sh '''
                     echo "=====kaniko====="
                     hostname
@@ -66,7 +66,7 @@ spec:
         }
         stage('Clone Manifest Repository') {
             steps {
-                containers('git'){
+                container('git'){
                     dir('manifest') {
                         git(
                             branch: 'main',
