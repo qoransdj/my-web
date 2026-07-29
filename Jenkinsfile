@@ -92,16 +92,16 @@ spec:
                     dir('manifest') {
                         sh '''
                             echo "===== Current Files in Manifest Folder ====="
-                            ls -al ./manifest
+                            ls -al
 
                             echo "===== Before ====="
-                            grep -i "image" manifest/dep-my-web.yaml || true
+                            grep -i "image" dep-my-web.yaml || true
 
-                            sed -i "s|image: qoransdj/my-web:.*|image: qoransdj/my-web:v${BUILD_NUMBER}|" manifest/dep-my-web.yaml
+                            sed -i "s|image: qoransdj/my-web:.*|image: qoransdj/my-web:v${BUILD_NUMBER}|" dep-my-web.yaml
 
                             echo ""
                             echo "===== After ====="
-                            grep -i "image" manifest/dep-my-web.yaml || true
+                            grep -i "image" dep-my-web.yaml || true
                         '''
                     }
                 }
@@ -122,8 +122,8 @@ spec:
                         ]) {
 
                             sh '''
-                                git config user.name "jenkins"
-                                git config user.email "jenkins@example.com"
+                                git config user.name "qoransdj"
+                                git config user.email "qoransdj@gmail.com"
 
                                 git add manifest/dep-my-web.yaml
 
@@ -136,6 +136,6 @@ spec:
                 }
             }
         }
-        
+
     }
 }
