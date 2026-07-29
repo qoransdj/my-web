@@ -122,7 +122,8 @@ spec:
                         ]) {
 
                             sh '''
-                                git config --global --add safe.directory '*'
+                                #git config --global --add safe.directory '*'
+                                git config --global --add safe.directory "${WORKSPACE}/manifest"
 
                                 echo "===== Git Status ====="
                                 git status
